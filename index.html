@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Meteor Detector — Defend Earth</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="img/17.png" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="img/17.png" />
 <style>
 :root{
   --bg:#1b0d2a; --bg-dark:#140921; --panel:#241238; --text:#ffffff; --muted:#d9cadf;
@@ -75,7 +76,7 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
 .feature-logo{width:72px;height:72px;display:block;margin:0 auto 12px;object-fit:contain;filter:invert(1) brightness(1.8);mix-blend-mode:screen;opacity:.95}
 .ready{background:var(--bg-dark)}
 .ready h1{font-size:clamp(40px,5.6vw,72px);text-transform:uppercase}
-.ready b{color:#ffc941}
+.ready b{color:var(--accent)}
 .about{background:var(--panel)}
 .grid-2{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
 .loop-grid2{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:22px}
@@ -116,13 +117,7 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
 .featured{margin:10px 0 4px}
 .featured small{color:var(--accent);font-weight:800;letter-spacing:.5px}
 .featured-line{font-family:Montserrat,sans-serif;font-weight:800;font-size:clamp(18px,2.2vw,28px);color:#fff;opacity:1;transition:opacity .35s}
-
-
-#science .card img{
-  object-fit:contain;           
-  background:#0e0816;           
-}
-
+#science .card img{object-fit:contain;background:#0e0816}
 @media (max-width:960px){
   .menu{display:none}
   .burger{display:block}
@@ -165,7 +160,7 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
     <h1 class="title"><span class="hi">DEFEND</span><span>EARTH</span></h1>
     <p class="subtitle">Design Strategies. Survive the Impact.</p>
     <div class="cta">
-       <a class="btn orange" href="otras-paginas/pagina-vinculada.html">PLAY NOW</a>
+      <a class="btn orange" href="otras-paginas/pagina-vinculada.html">PLAY NOW</a>
       <a class="btn ghost" href="#download"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>DOWNLOAD</a>
     </div>
   </div>
@@ -251,8 +246,7 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
   <div class="container" style="text-align:center">
     <h1>READY TO <b>SAVE</b> THE EARTH?</h1>
     <p>Each decision counts, real science, clear strategy</p>
-    <div class="cta" style="justify-content:center">
-    </div>
+    <div class="cta" style="justify-content:center"></div>
   </div>
 </section>
 
@@ -297,8 +291,7 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
 <section id="science" class="section">
   <div class="container">
     <h2 style="color:var(--accent)">Meteors</h2>
-    <p>Meteors are pieces of rock or metal from space. When they fall toward Earth, they burn in the atmosphere and create bright streaks of light. Most meteors are small and disappear before reaching the ground, but some survive and become meteorites. Scientists study meteorites to learn about the formation of planets and the history of our solar system. Meteor showers happen when Earth travels through streams of space dust left by comets, creating many meteors in the sky at once.
-</p>
+    <p>Meteors are pieces of rock or metal from space. When they fall toward Earth, they burn in the atmosphere and create bright streaks of light. Most meteors are small and disappear before reaching the ground, but some survive and become meteorites. Scientists study meteorites to learn about the formation of planets and the history of our solar system. Meteor showers happen when Earth travels through streams of space dust left by comets, creating many meteors in the sky at once.</p>
     <div class="thumb-row" style="margin-top:18px">
       <figure class="card"><img alt="moon" src="img/12.png"></figure>
       <figure class="card"><img alt="surface" src="img/13.png"></figure>
@@ -411,13 +404,12 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
   </div>
 </footer>
 
-<!-- 1) Firebase + fakeSubmit -->
+<!-- Firebase login/signup -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, getIdToken } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
   import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  // TU CONFIG (copiado de Firebase)
   const firebaseConfig = {
     apiKey: "AIzaSyDlTxiZiUmh4Zv7d0OGrd6evkx2FhYyAUw",
     authDomain: "base-de-datos-7bfcc.firebaseapp.com",
@@ -428,12 +420,10 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
     measurementId: "G-GWMLHPMTKC"
   };
 
-  // Init
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Reemplazo de fakeSubmit: usa Firebase Auth
   window.fakeSubmit = async (ev, mode) => {
     ev.preventDefault();
     const form = ev.target;
@@ -468,17 +458,15 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
     return false;
   };
 
-  // Estado de sesión (opcional)
   onAuthStateChanged(auth, (user) => {
     const el = document.getElementById('login-msg');
     if (el) el.textContent = user ? `Conectado como ${user.email}` : '';
   });
 
-  // Logout opcional
   window.logout = async () => { await signOut(auth); localStorage.removeItem('token'); };
 </script>
 
-<!-- 2) Tu JS de UI (igual que el tuyo, SIN la fakeSubmit antigua) -->
+<!-- UI JS -->
 <script>
   document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.menu').classList.remove('open')));
 
@@ -514,10 +502,6 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
   document.querySelectorAll('.flashcard').forEach(c=>{
     c.addEventListener('click', ()=> c.classList.toggle('is-open'));
   });
-</script>
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-  window.supabase = createClient('https://TU-PROYECTO.supabase.co', 'TU_ANON_KEY');
 </script>
 
 </body>
