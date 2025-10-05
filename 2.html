@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meteor Detector — Defend Earth</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#1b0d2a; --bg-dark:#140921; --panel:#241238; --text:#ffffff; --muted:#d9cadf;
+  --accent:#ff9d1e; --accent-2:#ff4d4d; --link:#ffd166; --pill:#351a55; --line:rgba(255,255,255,.08) }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Nunito Sans",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;scroll-behavior:smooth}
+a{color:var(--link);text-decoration:none}
+img{max-width:100%;display:block}
+.container{width:min(1100px,92%);margin:auto}
+.section{padding:72px 0}
+h1,h2,h3,h4{font-family:Montserrat,sans-serif;margin:0 0 16px}
+h1{font-size:clamp(40px,6vw,76px);line-height:1}
+h2{font-size:clamp(28px,4vw,42px);letter-spacing:.5px}
+h3{font-size:22px}
+p{color:var(--muted);line-height:1.6;margin:0 0 14px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#12081e 0%, rgba(18,8,30,.88) 60%, rgba(18,8,30,.6) 100%);backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.6px}
+.brand small{opacity:.7;font-weight:600}
+.menu{display:flex;gap:26px;font-weight:700;text-transform:uppercase}
+.menu a{color:#fff;opacity:.9}
+.menu a:hover{color:var(--accent)}
+.burger{display:none;cursor:pointer}
+
+/* HERO */
+.hero{position:relative;min-height:86vh;display:grid;place-items:center;background:#000 url('https://images.unsplash.com/photo-1580428180175-6a7e9a17eb79?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 600px at 20% 25%, rgba(255,157,30,.22), transparent 60%), linear-gradient(180deg, rgba(15,6,24,.65), rgba(15,6,24,.92))}
+.hero-card{position:relative;z-index:2;text-align:left;width:min(950px,92%)}
+.kicker{font-weight:800;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.title{font-family:Montserrat;font-weight:800;line-height:.95}
+.title span{display:block}
+.title .hi{color:var(--accent);letter-spacing:2px}
+.subtitle{max-width:680px}
+.cta{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:14px 22px;font-weight:800;letter-spacing:.5px;border:2px solid transparent}
+.btn svg{width:20px;height:20px}
+.btn.orange{background:var(--accent);color:#1a0d28}
+.btn.ghost{background:transparent;border-color:#fff;color:#fff}
+.btn.red{background:var(--accent-2);color:#fff}
+
+/* STRIP */
+.strip{background:var(--panel);text-align:center;padding:28px 0;border-block:1px solid rgba(255,255,255,.06)}
+.strip h2{color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+
+/* CARDS / THUMBS */
+.thumb-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.card{background:#120a1d;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.card img{aspect-ratio:16/9;object-fit:cover;width:100%}
+.card figcaption{padding:12px 14px;color:#cfc3d9;font-weight:700;text-transform:lowercase;letter-spacing:.6px}
+
+/* FLASHCARDS */
+.flash-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.flashcard{position:relative;aspect-ratio:16/9;perspective:1200px}
+.flashcard .flip{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s}
+.flashcard:hover .flip,.flashcard.is-open .flip{transform:rotateY(180deg)}
+.flashcard .face{position:absolute;inset:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;backface-visibility:hidden}
+.flashcard .front{background:#120a1d}
+.flashcard .front img{width:100%;height:100%;object-fit:cover;display:block}
+.flashcard .front .label{position:absolute;left:16px;bottom:12px;font-weight:800;font-size:18px;color:#e8e0f2;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.flashcard .back{transform:rotateY(180deg);background:#170e27;padding:16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.flashcard .back h4{margin:0;color:var(--accent)}
+.flashcard .back p{margin:0;color:#d7cdea;line-height:1.35;font-size:14.5px}
+.flashcard.scrollable .back{overflow:auto}
+.flashcard.scrollable .back h4{position:sticky; top:0; z-index:1; background:#170e27; padding:10px 0 6px; margin:0 0 10px; border-bottom:1px solid rgba(255,255,255,.08)}
+.flashcard.scrollable .back p{margin:0}
+.flashcard.scrollable .back::-webkit-scrollbar{width:8px}
+.flashcard.scrollable .back::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
+
+/* FEATURES */
+.features{background:var(--panel);border-top:1px solid rgba(255,255,255,.06)}
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:20px}
+.feature{background:#160e25;border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center}
+.feature-logo{width:72px;height:72px;display:block;margin:0 auto 12px;object-fit:contain;filter:invert(1) brightness(1.8);mix-blend-mode:screen;opacity:.95}
+
+/* READY */
+.ready{background:var(--bg-dark)}
+.ready h1{font-size:clamp(40px,5.6vw,72px);text-transform:uppercase}
+.ready b{color:#ffc941}
+
+/* ABOUT + GAME LOOP */
+.about{background:var(--panel)}
+.grid-2{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+
+/* GAME LOOP ICONS */
+.loop-grid2{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:22px}
+.loop2{text-align:center}
+.loop-ico{width:120px;height:120px;margin:0 auto 12px;border-radius:50%;background:#ffb74a;box-shadow:0 6px 24px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.loop-ico img{display:block;margin:0;width:70%;max-height:70%;height:auto;object-fit:contain;object-position:center;mix-blend-mode:multiply;filter:contrast(1.25)}
+.loop2 h4{margin:6px 0 4px;letter-spacing:.8px}
+.loop2 p{margin:0;color:#ffcf73;font-size:.95rem;line-height:1.35}
+
+/* TEAM + DEVLOG */
+.team-hero{background:#0e0816 url('https://images.unsplash.com/photo-1558980664-10b2d3b3e61d?q=80&w=1975&auto=format&fit=crop') center/cover no-repeat}
+.badge{display:inline-block;background:var(--pill);border:1px solid rgba(255,255,255,.12);padding:6px 12px;border-radius:999px;color:#e7dcf3;margin-bottom:10px}
+.members{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.member{background:#160e25;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.devlog{background:var(--panel)}
+.auth-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+.auth-card{background:#120a1d;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.tabbar{display:flex;gap:8px;margin-bottom:14px}
+.tab{cursor:pointer;border-radius:999px;padding:10px 16px;font-weight:800;letter-spacing:.4px;border:2px solid rgba(255,255,255,.14);color:#fff;background:transparent}
+.tab.active{background:var(--accent);color:#1a0d28;border-color:transparent}
+.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.label{font-weight:700;color:#e7dcf3;font-size:.95rem}
+.input{display:flex;align-items:center;gap:8px;background:#0e0817;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.input input{all:unset;color:#fff;flex:1}
+.help{font-size:.85rem;color:#b7a9c7}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px}
+.hr{height:1px;background:var(--line);margin:14px 0}
+.notice{background:#170e27;border:1px dashed var(--line);padding:12px;border-radius:12px;color:#cbbfe0}
+.footer{background:#0f0a18;border-top:1px solid rgba(255,255,255,.06);padding:28px 0}
+.footer .cta{justify-content:center}
+.featured{margin:10px 0 4px}
+.featured small{color:var(--accent);font-weight:800;letter-spacing:.5px}
+.featured-line{font-family:Montserrat,sans-serif;font-weight:800;font-size:clamp(18px,2.2vw,28px);color:#fff;opacity:1;transition:opacity .35s}
+
+/* Meteors: imágenes completas dentro de la tarjeta */
+#science .card img{object-fit:contain;background:#0e0816}
+
+/* PLAY MODAL */
+.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:999}
+.modal.open{display:grid}
+.modal-card{width:min(1080px,94vw);height:min(80vh,720px);background:#120a1d;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.modal-head h3{margin:0;font-family:Montserrat}
+.modal-body{flex:1}
+.modal-body iframe{width:100%;height:100%;border:0;display:block;background:#0b0712}
+.close-x{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:10px;padding:8px 12px;font-weight:800;cursor:pointer}
+
+/* RWD */
+@media (max-width:960px){
+  .menu{display:none}
+  .burger{display:block}
+  .grid-2{grid-template-columns:1fr}
+  .thumb-row{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .members{grid-template-columns:repeat(3,1fr)}
+  .auth-grid{grid-template-columns:1fr}
+  .flash-row{grid-template-columns:1fr}
+  .loop-grid2{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:560px){
+  .features-grid{grid-template-columns:1fr}
+  .members{grid-template-columns:repeat(2,1fr)}
+  .loop-grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 21l8-3 10-10-5-5L6 13 3 21z" stroke="#ff9d1e" stroke-width="2" fill="none"/></svg>
+      <span>Meteor <strong>detector</strong><br><small>ESTRELLAS BEYONDSIGHT</small></span>
+    </div>
+    <nav class="menu">
+      <a href="#home">home</a><a href="#about">about</a><a href="#science">science</a><a href="#devlog">dev log</a><a href="#team">team</a>
+    </nav>
+    <div class="burger" onclick="document.querySelector('.menu').classList.toggle('open')">☰</div>
+  </div>
+</header>
+
+<section id="home" class="hero">
+  <div class="hero-card">
+    <div class="featured">
+      <small>Featured:</small>
+      <div class="featured-line"><span id="featured-rotator">Real NASA asteroid data</span></div>
+    </div>
+    <h1 class="title"><span class="hi">DEFEND</span><span>EARTH</span></h1>
+    <p class="subtitle">Design Strategies. Survive the Impact.</p>
+    <div class="cta">
+      <!-- PLAY NOW integra función -->
+      <button class="btn orange" id="btn-play">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7z" fill="#1a0d28"/></svg>PLAY NOW
+      </button>
+      <a class="btn ghost" href="#download"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>DOWNLOAD</a>
+    </div>
+  </div>
+</section>
+
+<section class="strip"><h2>Scientific review</h2></section>
+<section class="section">
+  <div class="container">
+    <div class="flash-row">
+
+      <div class="flashcard">
+        <div class="flip">
+          <div class="face front">
+            <img src="img/1.jpg" alt="asteroid jet" loading="lazy">
+            <div class="label">strategic defense</div>
+          </div>
+          <div class="face back">
+            <h4>Strategic defense</h4>
+            <p>Meteor Madness applies NASA asteroid data (Sentry, SBDB, CAD, NeoWs) to simulate impact scenarios. A Monte Carlo model estimates entry energy, footprint, and hazards with uncertainty bands. Outputs are interactive maps and timelines that communicate planetary defense risks and mitigation options.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard scrollable">
+        <div class="flip">
+          <div class="face front">
+            <img src="img/2.jpg" alt="satellite over earth" loading="lazy">
+            <div class="label">Resource management</div>
+          </div>
+          <div class="face back">
+            <h4>Resource management</h4>
+            <p>Impact simulation models entry energy and footprint from NASA asteroid data, showing blast, heat, and damage zones on interactive maps.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="flip">
+          <div class="face front">
+            <img src="img/3.jpg" alt="meteor entering atmosphere" loading="lazy">
+            <div class="label">impact simulation</div>
+          </div>
+          <div class="face back">
+            <h4>Impact simulation</h4>
+            <p>Meteor Madness impact simulation uses NASA orbital and physical data to model entry angle, speed, and size. The engine estimates energy release, blast radius, thermal flux, and damage footprint with uncertainty bands. Results display on maps and timelines to show potential local and global effects.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="features section">
+  <div class="container">
+    <h2>Game features</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <img class="feature-logo" src="Logos/4.jpg" alt="earth icon">
+        <h3>Real NASA Data</h3>
+        <p>Authentic asteroid tracking</p>
+      </div>
+      <div class="feature">
+        <img class="feature-logo" src="Logos/5.jpg" alt="rocket icon">
+        <h3>Physics Simulation</h3>
+        <p>Realistic calculations</p>
+      </div>
+      <div class="feature">
+        <img class="feature-logo" src="Logos/6.jpg" alt="shield icon">
+        <h3>Defense Systems</h3>
+        <p>Planetary defense networks</p>
+      </div>
+      <div class="feature">
+        <img class="feature-logo" src="Logos/7.jpg" alt="graduation cap icon">
+        <h3>Educational</h3>
+        <p>Learn while playing</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ready section" id="start">
+  <div class="container" style="text-align:center">
+    <h1>READY TO <b>SAVE</b> THE EARTH?</h1>
+    <p>Each decision counts, real science, clear strategy</p>
+    <div class="cta" style="justify-content:center"></div>
+  </div>
+</section>
+
+<section id="about" class="about section">
+  <div class="container">
+    <h2 style="color:var(--accent)">About the game</h2>
+    <div class="grid-2">
+      <div>
+        <p>Experience the ultimate planetary defense simulation where real science meets strategic gameplay. Defend Earth from asteroid threats using authentic NASA data and cutting-edge physics simulations.</p>
+        <h3 style="margin-top:18px;color:#ffc941;letter-spacing:1px">The Story</h3>
+        <p>In the year 2045, Earth's space agencies have detected an unprecedented number of Near-Earth Objects (NEOs) on collision courses with our planet. As the newly appointed Director of Planetary Defense, you must coordinate global efforts to protect humanity. Using real-time data from NASA's Center for Near Earth Object Studies (CNEOS), you'll track incoming threats, allocate resources, and deploy defensive systems ranging from kinetic impactors to gravity tractors. Every decision matters. Every asteroid deflected saves millions of lives. The fate of Earth rests in your strategic planning and scientific understanding.</p>
+      </div>
+      <figure class="card" style="margin:0"><img alt="asteroid" src="img/8.jpg"></figure>
+    </div>
+
+    <h3 style="margin-top:32px;color:var(--accent)">Gameplay loop</h3>
+    <div class="loop-grid2">
+      <div class="loop2">
+        <div class="loop-ico"><img src="Logos/9.jpg" alt="detect"></div>
+        <h4>DETECT</h4>
+        <p>Monitor incoming asteroids using real NASA tracking data</p>
+      </div>
+      <div class="loop2">
+        <div class="loop-ico"><img src="Logos/10.jpg" alt="analyze"></div>
+        <h4>ANALYZE</h4>
+        <p>Calculate impact trajectories and assess threat levels</p>
+      </div>
+      <div class="loop2">
+        <div class="loop-ico"><img src="Logos/11.jpg" alt="strategize"></div>
+        <h4>STRATEGIZE</h4>
+        <p>Plan defense missions and allocate global resources</p>
+      </div>
+      <div class="loop2">
+        <div class="loop-ico"><img src="Logos/6.jpg" alt="defend"></div>
+        <h4>DEFEND</h4>
+        <p>Deploy systems and execute planetary defense operations</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="science" class="section">
+  <div class="container">
+    <h2 style="color:var(--accent)">Meteors</h2>
+    <p>Meteors are pieces of rock or metal from space. When they fall toward Earth, they burn in the atmosphere and create bright streaks of light. Most meteors are small and disappear before reaching the ground, but some survive and become meteorites. Scientists study meteorites to learn about the formation of planets and the history of our solar system. Meteor showers happen when Earth travels through streams of space dust left by comets, creating many meteors in the sky at once.</p>
+    <div class="thumb-row" style="margin-top:18px">
+      <figure class="card"><img alt="moon" src="img/12.png"></figure>
+      <figure class="card"><img alt="surface" src="img/13.png"></figure>
+      <figure class="card"><img alt="comet" src="img/14.png"></figure>
+    </div>
+  </div>
+</section>
+
+<section id="devlog" class="devlog section">
+  <div class="container">
+    <h2>Dev-log</h2>
+    <div class="auth-grid" style="margin-top:14px">
+      <div>
+        <div class="card" style="padding:18px">
+          <h3 style="color:var(--accent)">Bitácora</h3>
+          <div class="hr"></div>
+          <p>• v0.2 — Integración dataset NEO y simulador 2D Δv.</p>
+          <p>• v0.1 — UI base, héroe y secciones.</p>
+          <div class="notice" style="margin-top:12px">Accede para comentar, subir capturas o seguir tareas.</div>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="tabbar">
+          <button class="tab active" data-auth-tab="login">Iniciar sesión</button>
+          <button class="tab" data-auth-tab="signup">Crear cuenta</button>
+        </div>
+
+        <form id="form-login" onsubmit="return fakeSubmit(event,'login')" autocomplete="on" novalidate>
+          <div class="field">
+            <label class="label" for="lemail">Correo</label>
+            <div class="input"><input id="lemail" name="email" type="email" placeholder="tu@email.com" required></div>
+            <small class="help">Usa el correo del equipo si ya tienes acceso.</small>
+          </div>
+          <div class="field">
+            <label class="label" for="lpass">Contraseña</label>
+            <div class="input">
+              <input id="lpass" name="password" type="password" minlength="6" placeholder="••••••••" required>
+              <button type="button" class="btn ghost" style="padding:6px 10px;border-radius:10px" onclick="togglePass('lpass')">ver</button>
+            </div>
+          </div>
+          <div class="row">
+            <label class="help"><input type="checkbox" id="remember"> Recuérdame</label>
+            <a href="#" class="help">¿Olvidaste tu contraseña?</a>
+          </div>
+          <div class="hr"></div>
+          <div class="cta" style="margin-top:6px">
+            <button class="btn orange" type="submit">Entrar</button>
+            <button class="btn ghost" type="reset">Limpiar</button>
+          </div>
+          <p id="login-msg" class="help" style="margin-top:10px"></p>
+        </form>
+
+        <form id="form-signup" onsubmit="return fakeSubmit(event,'signup')" style="display:none" novalidate>
+          <div class="field">
+            <label class="label" for="sname">Nombre</label>
+            <div class="input"><input id="sname" name="name" placeholder="Tu nombre" required></div>
+          </div>
+          <div class="field">
+            <label class="label" for="semail">Correo</label>
+            <div class="input"><input id="semail" name="email" type="email" placeholder="tu@email.com" required></div>
+          </div>
+          <div class="field">
+            <label class="label" for="spass">Contraseña</label>
+            <div class="input">
+              <input id="spass" name="password" type="password" minlength="6" placeholder="mín. 6 caracteres" required>
+              <button type="button" class="btn ghost" style="padding:6px 10px;border-radius:10px" onclick="togglePass('spass')">ver</button>
+            </div>
+          </div>
+          <div class="row">
+            <label class="help"><input type="checkbox" required> Acepto términos</label>
+          </div>
+          <div class="hr"></div>
+          <div class="cta" style="margin-top:6px">
+            <button class="btn orange" type="submit">Crear cuenta</button>
+            <button class="btn ghost" type="reset">Limpiar</button>
+          </div>
+          <p id="signup-msg" class="help" style="margin-top:10px"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="team" class="team-hero section">
+  <div class="container">
+    <span class="badge">ESTRELLAS BEYONDSIGHT</span>
+    <h2>About the team</h2>
+    <p>We are a Guatemalan team passionate about science, technology, and innovation. As part of the NASA Space Apps Challenge 2025, we are tackling the Meteor Madness challenge, aiming to create creative solutions to better understand meteors and their impact on Earth. We believe in collaboration and that from Guatemala we can also reach the stars. 🌌✨</p>
+    <div class="members">
+      <div class="member"><strong>Marco Mancilla</strong><br/><small>Prog</small></div>
+      <div class="member"><strong>Estefania Barrios</strong><br/><small>Design</small></div>
+      <div class="member"><strong>Evan Perez</strong><br/><small>Hybrid</small></div>
+      <div class="member"><strong>Sebastián Sanchez</strong><br/><small>Prog</small></div>
+      <div class="member"><strong>Jcabed Itzep</strong><br/><small>Design</small></div>
+      <div class="member"><strong>Edgar Juárez</strong><br/><small>Tester</small></div>
+    </div>
+  </div>
+</section>
+
+<footer id="download" class="footer">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:10px">Contacto • WhatsApp / Telegram • +502 4614-8607</div>
+    <div class="cta">
+      <a class="btn orange" href="#home">Volver arriba</a>
+      <a class="btn ghost" href="#">Descargar press kit</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL PLAY -->
+<div class="modal" id="play-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="playTitle">
+    <div class="modal-head">
+      <h3 id="playTitle">Play — Meteor Detector</h3>
+      <button class="close-x" id="close-play">Cerrar</button>
+    </div>
+    <div class="modal-body">
+      <!-- Carga la página del juego con el mismo estilo -->
+      <iframe src="play.html#demo" title="Meteor Detector - Demo"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.menu').classList.remove('open')));
+
+const tabs = document.querySelectorAll('.tab');
+const fLogin = document.getElementById('form-login');
+const fSignup = document.getElementById('form-signup');
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  const mode = t.dataset.authTab;
+  fLogin.style.display = mode==='login' ? 'block':'none';
+  fSignup.style.display = mode==='signup' ? 'block':'none';
+}));
+
+function togglePass(id){
+  const el = document.getElementById(id);
+  el.type = (el.type === 'password') ? 'text' : 'password';
+}
+
+/* Login/Signup al backend (como ya tenías) */
+async function fakeSubmit(ev, mode){
+  ev.preventDefault();
+  const form = ev.target;
+  const email = form.querySelector('input[type="email"]').value.trim();
+  const password = form.querySelector('input[type="password"]').value;
+  const msgId = mode==='login' ? 'login-msg' : 'signup-msg';
+  const target = document.getElementById(msgId);
+
+  target.textContent = 'Procesando...';
+  try{
+    const res = await fetch(`/api/${mode}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Error');
+    localStorage.setItem('token', data.token);
+    target.textContent = (mode==='login') ? 'Sesión iniciada ✅' : 'Cuenta creada ✅';
+  }catch(err){
+    target.textContent = '❌ ' + err.message;
+  }
+  setTimeout(()=>{ target.textContent=''; }, 4000);
+  return false;
+}
+
+/* Rotador */
+const phrases = ["Real NASA asteroid data","Resource and defense strategy","learn while you play"];
+const rot = document.getElementById("featured-rotator");
+let i = 0;
+setInterval(()=>{ if(!rot) return; rot.parentElement.style.opacity = 0; setTimeout(()=>{ i=(i+1)%phrases.length; rot.textContent = phrases[i]; rot.parentElement.style.opacity = 1; },200); },2000);
+
+/* Flip de flashcards */
+document.querySelectorAll('.flashcard').forEach(c=>{ c.addEventListener('click', ()=> c.classList.toggle('is-open')); });
+
+/* === PLAY NOW: abre modal; si prefieres redirigir a página completa, cambia openPlay() === */
+const playBtn = document.getElementById('btn-play');
+const playModal = document.getElementById('play-modal');
+const closePlay = document.getElementById('close-play');
+
+function openPlay(){
+  // Si quieres forzar login antes de jugar, descomenta:
+  // if(!localStorage.getItem('token')){ document.querySelector('[data-auth-tab="login"]').click(); document.getElementById('devlog').scrollIntoView({behavior:'smooth'}); return; }
+  playModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePlayModal(){
+  playModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+playBtn.addEventListener('click', openPlay);
+closePlay.addEventListener('click', closePlayModal);
+playModal.addEventListener('click', (e)=>{ if(e.target===playModal) closePlayModal(); });
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePlayModal(); });
+</script>
+</body>
+</html>
