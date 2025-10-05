@@ -515,6 +515,10 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
     c.addEventListener('click', ()=> c.classList.toggle('is-open'));
   });
 </script>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  window.supabase = createClient('https://TU-PROYECTO.supabase.co', 'TU_ANON_KEY');
+</script>
 
 </body>
 </html>
