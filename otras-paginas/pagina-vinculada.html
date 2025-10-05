@@ -21,6 +21,8 @@ h1,h2,h3,h4{font-family:Montserrat,sans-serif;margin:0 0 16px}
 h1{font-size:clamp(32px,5vw,56px);line-height:1}
 h2{font-size:clamp(24px,4vw,40px)}
 p{color:var(--muted);line-height:1.7;margin:0 0 14px}
+
+/* NAV */
 .nav{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#12081e 0%, rgba(18,8,30,.88) 60%, rgba(18,8,30,.6) 100%);backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid rgba(255,255,255,.06)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.6px}
@@ -29,8 +31,12 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
 .menu a{color:#fff;opacity:.9}
 .menu a:hover{color:var(--accent)}
 .burger{display:none;cursor:pointer}
+
+/* HERO MINI */
 .hero-mini{padding:58px 0;background:radial-gradient(900px 420px at 18% 15%, rgba(255,157,30,.18), transparent 60%), linear-gradient(180deg, rgba(15,6,24,.65), rgba(15,6,24,.92))}
 .hero-mini .subtitle{max-width:760px}
+
+/* WRAPPER */
 .panel{background:var(--panel);border-top:1px solid rgba(255,255,255,.06)}
 .content{background:#120a1d;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 12px 28px rgba(0,0,0,.35)}
 .content h1,.content h2,.content h3{color:#fff}
@@ -47,6 +53,8 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
 .content th,.content td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
 .content th{background:#170e27;text-align:left}
 .content tr:last-child td{border-bottom:none}
+
+/* MISSION CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
 @media (max-width:900px){ .cards-grid{grid-template-columns:1fr} }
 
@@ -86,6 +94,7 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
 .btn.ghost{background:transparent;border-color:#fff;color:#fff}
 .btn svg{width:18px;height:18px}
 
+/* BRIEFING */
 .briefing{
   margin-top:34px;padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,.14);
   background:
@@ -107,9 +116,12 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
 .b-item h4.green{color:#62f3a1}
 .b-item h4.pink{color:#ffb4ee}
 .b-item p{max-width:320px}
+
+/* FOOTER */
 .footer{background:#0f0a18;border-top:1px solid rgba(255,255,255,.06);padding:28px 0;margin-top:60px}
 .footer .cta{display:flex;gap:12px;justify-content:center}
 
+/* RWD */
 @media (max-width:960px){
   .menu{display:none}
   .burger{display:block}
@@ -125,11 +137,12 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
       <span>Meteor <strong>detector</strong><br><small>ESTRELLAS BEYONDSIGHT</small></span>
     </div>
     <nav class="menu">
-      <a href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#home">home</a>
-      <a href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#about">about</a>
-      <a href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#science">science</a>
-      <a href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#devlog">dev log</a>
-      <a href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#team">team</a>
+      <!-- Rutas relativas para GitHub Pages (esta página en /Otras paguinas/) -->
+      <a href="../index.html#home">home</a>
+      <a href="../index.html#about">about</a>
+      <a href="../index.html#science">science</a>
+      <a href="../index.html#devlog">dev log</a>
+      <a href="../index.html#team">team</a>
     </nav>
     <div class="burger" onclick="document.querySelector('.menu').classList.toggle('open')">☰</div>
   </div>
@@ -147,9 +160,10 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
     <div class="content">
       <div class="cards-grid">
 
+        <!-- Card 1 -->
         <article class="mcard">
           <div class="media">
-            <img src="img\15.jpg" alt="Impactor-2025">
+            <img src="../img/15.jpg" alt="Impactor-2025">
             <div class="badges">
               <span class="pill red">CRÍTICO</span>
               <span class="pill orange">ADVANCED</span>
@@ -171,16 +185,17 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
               <div class="chip"><small>Magnitude</small><span>6.36</span></div>
             </div>
 
-            <a class="btn orange" href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#start">
+            <a class="btn orange" href="../index.html#start">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5v14l11-7-11-7z" fill="#1a0d28"/></svg>
               SELECCIONAR MISIÓN
             </a>
           </div>
         </article>
 
+        <!-- Card 2 -->
         <article class="mcard">
           <div class="media">
-            <img src="img\16.jpg" alt="Bennu">
+            <img src="../img/16.jpg" alt="Bennu">
             <div class="badges">
               <span class="pill red">CRÍTICO</span>
               <span class="pill blue">BEGINNER</span>
@@ -202,7 +217,7 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
               <div class="chip"><small>Magnitude</small><span>5.34</span></div>
             </div>
 
-            <a class="btn orange" href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#start">
+            <a class="btn orange" href="../index.html#start">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5v14l11-7-11-7z" fill="#1a0d28"/></svg>
               SELECCIONAR MISIÓN
             </a>
@@ -210,6 +225,8 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
         </article>
 
       </div>
+
+      <!-- Briefing -->
       <div class="briefing">
         <h3>BRIEFING DE SIMULACIÓN</h3>
         <div class="briefing-grid">
@@ -249,8 +266,8 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
   <div class="container">
     <div style="text-align:center;margin-bottom:10px">Contacto • WhatsApp / Telegram • +502 4614-8607</div>
     <div class="cta">
-      <a class="btn orange" href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html#home">Volver al inicio</a>
-      <a class="btn ghost" href="file:///C:/Users/fabia/OneDrive/Escritorio/Marco/Paginas%20Web/meteor-detector-auth/public/index.html">Página principal</a>
+      <a class="btn orange" href="../index.html#home">Volver al inicio</a>
+      <a class="btn ghost" href="../index.html">Página principal</a>
     </div>
   </div>
 </footer>
