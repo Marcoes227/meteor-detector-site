@@ -411,73 +411,110 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
   </div>
 </footer>
 
-<script>
-document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.menu').classList.remove('open')));
+<!-- 1) Firebase + fakeSubmit -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, getIdToken } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-const tabs = document.querySelectorAll('.tab');
-const fLogin = document.getElementById('form-login');
-const fSignup = document.getElementById('form-signup');
-tabs.forEach(t=>t.addEventListener('click',()=>{
-  tabs.forEach(x=>x.classList.remove('active'));
-  t.classList.add('active');
-  const mode = t.dataset.authTab;
-  fLogin.style.display = mode==='login' ? 'block':'none';
-  fSignup.style.display = mode==='signup' ? 'block':'none';
-}));
+  // TU CONFIG (copiado de Firebase)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDlTxiZiUmh4Zv7d0OGrd6evkx2FhYyAUw",
+    authDomain: "base-de-datos-7bfcc.firebaseapp.com",
+    projectId: "base-de-datos-7bfcc",
+    storageBucket: "base-de-datos-7bfcc.firebasestorage.app",
+    messagingSenderId: "599340970365",
+    appId: "1:599340970365:web:1522e78ea8d795d4bedc14",
+    measurementId: "G-GWMLHPMTKC"
+  };
 
-function togglePass(id){
-  const el = document.getElementById(id);
-  el.type = (el.type === 'password') ? 'text' : 'password';
-}
+  // Init
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
+  // Reemplazo de fakeSubmit: usa Firebase Auth
+  window.fakeSubmit = async (ev, mode) => {
+    ev.preventDefault();
+    const form = ev.target;
+    const email = form.querySelector('input[type="email"]').value.trim();
+    const password = form.querySelector('input[type="password"]').value;
+    const msgId = mode === 'login' ? 'login-msg' : 'signup-msg';
+    const target = document.getElementById(msgId);
+    target.textContent = 'Procesando...';
 
-async function fakeSubmit(ev, mode){
-  ev.preventDefault();
-  const form = ev.target;
-  const email = form.querySelector('input[type="email"]').value.trim();
-  const password = form.querySelector('input[type="password"]').value;
-  const msgId = mode==='login' ? 'login-msg' : 'signup-msg';
-  const target = document.getElementById(msgId);
+    try {
+      if (mode === 'signup') {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, 'users', cred.user.uid), { email, createdAt: serverTimestamp() });
+        target.textContent = 'Cuenta creada ✅';
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+        target.textContent = 'Sesión iniciada ✅';
+      }
+      const token = await getIdToken(auth.currentUser, true);
+      localStorage.setItem('token', token);
+    } catch (err) {
+      const map = {
+        'auth/email-already-in-use': 'El correo ya está registrado.',
+        'auth/invalid-email': 'Correo no válido.',
+        'auth/weak-password': 'Contraseña muy débil (mín. 6).',
+        'auth/user-not-found': 'Usuario no encontrado.',
+        'auth/wrong-password': 'Contraseña incorrecta.'
+      };
+      document.getElementById(msgId).textContent = '❌ ' + (map[err.code] || err.message);
+    }
+    setTimeout(()=>{ document.getElementById(msgId).textContent=''; }, 4000);
+    return false;
+  };
 
-  target.textContent = 'Procesando...';
-  try{
-    const res = await fetch(`/api/${mode}`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Error');
-    localStorage.setItem('token', data.token);
-    target.textContent = (mode==='login') ? 'Sesión iniciada ✅' : 'Cuenta creada ✅';
-  }catch(err){
-    target.textContent = '❌ ' + err.message;
-  }
-  setTimeout(()=>{ target.textContent=''; }, 4000);
-  return false;
-}
+  // Estado de sesión (opcional)
+  onAuthStateChanged(auth, (user) => {
+    const el = document.getElementById('login-msg');
+    if (el) el.textContent = user ? `Conectado como ${user.email}` : '';
+  });
 
-
-const phrases = [
-  "Real NASA asteroid data",
-  "Resource and defense strategy",
-  "learn while you play"
-];
-const rot = document.getElementById("featured-rotator");
-let i = 0;
-setInterval(()=>{
-  if(!rot) return;
-  rot.parentElement.style.opacity = 0;
-  setTimeout(()=>{
-    i = (i + 1) % phrases.length;
-    rot.textContent = phrases[i];
-    rot.parentElement.style.opacity = 1;
-  }, 200);
-}, 2000);
-
-document.querySelectorAll('.flashcard').forEach(c=>{
-  c.addEventListener('click', ()=> c.classList.toggle('is-open'));
-});
+  // Logout opcional
+  window.logout = async () => { await signOut(auth); localStorage.removeItem('token'); };
 </script>
+
+<!-- 2) Tu JS de UI (igual que el tuyo, SIN la fakeSubmit antigua) -->
+<script>
+  document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.menu').classList.remove('open')));
+
+  const tabs = document.querySelectorAll('.tab');
+  const fLogin = document.getElementById('form-login');
+  const fSignup = document.getElementById('form-signup');
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const mode = t.dataset.authTab;
+    fLogin.style.display = mode==='login' ? 'block':'none';
+    fSignup.style.display = mode==='signup' ? 'block':'none';
+  }));
+
+  function togglePass(id){
+    const el = document.getElementById(id);
+    el.type = (el.type === 'password') ? 'text' : 'password';
+  }
+
+  const phrases = ["Real NASA asteroid data","Resource and defense strategy","learn while you play"];
+  const rot = document.getElementById("featured-rotator");
+  let i = 0;
+  setInterval(()=>{
+    if(!rot) return;
+    rot.parentElement.style.opacity = 0;
+    setTimeout(()=>{
+      i = (i + 1) % phrases.length;
+      rot.textContent = phrases[i];
+      rot.parentElement.style.opacity = 1;
+    }, 200);
+  }, 2000);
+
+  document.querySelectorAll('.flashcard').forEach(c=>{
+    c.addEventListener('click', ()=> c.classList.toggle('is-open'));
+  });
+</script>
+
 </body>
 </html>
