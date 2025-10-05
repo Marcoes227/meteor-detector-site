@@ -126,75 +126,7 @@ p{color:var(--muted);line-height:1.7;margin:0 0 14px}
 <header class="nav">
   <div class="container nav-inner">
     <div class="brand">
-      <svg viewBox="0 0 1000 800" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-    <!-- Fondo radial oscuro -->
-        <radialGradient id="bg" cx="50%" cy="40%" r="70%">
-          <stop offset="0%"  stop-color="#090909"/>
-          <stop offset="55%" stop-color="#050505"/>
-          <stop offset="100%" stop-color="#000000"/>
-        </radialGradient>
-
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="6" result="b1"/>
-          <feGaussianBlur in="b1" stdDeviation="12" result="b2"/>
-          <feMerge>
-            <feMergeNode in="b2"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-
-    <!-- Brillo más intenso para el texto -->
-        <filter id="textGlow" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="8" result="tb1"/>
-          <feGaussianBlur in="tb1" stdDeviation="18" result="tb2"/>
-          <feMerge>
-            <feMergeNode in="tb2"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-
-    <!-- Estrella de 4 puntas (símbolo reutilizable) -->
-        <symbol id="spark" viewBox="-40 -40 80 80">
-          <path d="M0,-34 L6,-8 L34,0 L6,8 L0,34 L-6,8 L-34,0 L-6,-8 Z"
-              fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
-        </symbol>
-      </defs>
-
-  <!-- Fondo -->
-  <rect width="100%" height="100%" fill="url(#bg)"/>
-
-  <!-- Grupo del isotipo (arco + cometa + estrellas) -->
-  <g filter="url(#glow)" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-    <!-- Arco superior (círculo abierto) -->
-    <path d="M330,330 A190,190 0 0 1 560,190" />
-    <!-- Arco inferior (cierra parte baja dejando hueco a la izquierda) -->
-    <path d="M650,250 A210,210 0 0 1 400,560" />
-
-    <!-- Trazos del cometa (3 aletas apuntando arriba-derecha) -->
-    <path d="M305,510 L455,370 L470,330" />
-    <path d="M345,520 L495,355 L515,315" />
-    <path d="M385,530 L525,350 L550,310" />
-
-    <!-- Estrellas / destellos -->
-    <use href="#spark" x="675" y="165" transform="scale(1.0)"/>
-    <use href="#spark" x="605" y="210" transform="scale(0.7)"/>
-  </g>
-
-  <!-- Texto con brillo -->
-  <g filter="url(#textGlow)" fill="none" stroke="#ffffff" stroke-width="4">
-    <text x="500" y="640" text-anchor="middle"
-          font-family="Montserrat, Arial, sans-serif"
-          font-size="96" letter-spacing="6"
-          fill="none" stroke="#ffffff">ESTRELLAS</text>
-
-    <text x="500" y="720" text-anchor="middle"
-          font-family="Montserrat, Arial, sans-serif"
-          font-size="88" letter-spacing="6"
-          fill="none" stroke="#ffffff">BEYONDSIGHT</text>
-  </g>
-</svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 21l8-3 10-10-5-5L6 13 3 21z" stroke="#ff9d1e" stroke-width="2" fill="none"/></svg>
 
       <span>Meteor <strong>detector</strong><br><small>ESTRELLAS BEYONDSIGHT</small></span>
     </div>
