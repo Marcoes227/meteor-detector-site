@@ -307,28 +307,28 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
         <div class="card" style="padding:18px">
           <h3 style="color:var(--accent)">Bitácora</h3>
           <div class="hr"></div>
-          <p>• v0.2 — Integración dataset NEO y simulador 2D Δv.</p>
-          <p>• v0.1 — UI base, héroe y secciones.</p>
+          <p>• v0.2 — NEO dataset integration and 2D Δv simulator Δv.</p>
+          <p>• v0.1 — Base UI, hero and sections.</p>
           <div class="notice" style="margin-top:12px">
-            Accede para comentar, subir capturas o seguir tareas.
+            Sign in to comment, upload screenshots, or follow tasks.
           </div>
         </div>
       </div>
 
       <div class="auth-card">
         <div class="tabbar">
-          <button class="tab active" data-auth-tab="login">Iniciar sesión</button>
-          <button class="tab" data-auth-tab="signup">Crear cuenta</button>
+          <button class="tab active" data-auth-tab="login">Login</button>
+          <button class="tab" data-auth-tab="signup">Create account</button>
         </div>
 
         <form id="form-login" onsubmit="return fakeSubmit(event,'login')" autocomplete="on" novalidate>
           <div class="field">
-            <label class="label" for="lemail">Correo</label>
+            <label class="label" for="lemail">Mail</label>
             <div class="input"><input id="lemail" name="email" type="email" placeholder="tu@email.com" required></div>
-            <small class="help">Usa el correo del equipo si ya tienes acceso.</small>
+            <small class="help">Use the team email if you already have access.</small>
           </div>
           <div class="field">
-            <label class="label" for="lpass">Contraseña</label>
+            <label class="label" for="lpass">Password</label>
             <div class="input">
               <input id="lpass" name="password" type="password" minlength="6" placeholder="••••••••" required>
               <button type="button" class="btn ghost" style="padding:6px 10px;border-radius:10px" onclick="togglePass('lpass')">ver</button>
@@ -336,39 +336,39 @@ p{color:var(--muted);line-height:1.6;margin:0 0 14px}
           </div>
           <div class="row">
             <label class="help"><input type="checkbox" id="remember"> Recuérdame</label>
-            <a href="#" class="help">¿Olvidaste tu contraseña?</a>
+            <a href="#" class="help">Forgot your password?</a>
           </div>
           <div class="hr"></div>
           <div class="cta" style="margin-top:6px">
-            <button class="btn orange" type="submit">Entrar</button>
-            <button class="btn ghost" type="reset">Limpiar</button>
+            <button class="btn orange" type="submit">Enter</button>
+            <button class="btn ghost" type="reset">Clean</button>
           </div>
           <p id="login-msg" class="help" style="margin-top:10px"></p>
         </form>
 
         <form id="form-signup" onsubmit="return fakeSubmit(event,'signup')" style="display:none" novalidate>
           <div class="field">
-            <label class="label" for="sname">Nombre</label>
+            <label class="label" for="sname">Name</label>
             <div class="input"><input id="sname" name="name" placeholder="Tu nombre" required></div>
           </div>
           <div class="field">
-            <label class="label" for="semail">Correo</label>
+            <label class="label" for="semail">Mail</label>
             <div class="input"><input id="semail" name="email" type="email" placeholder="tu@email.com" required></div>
           </div>
           <div class="field">
-            <label class="label" for="spass">Contraseña</label>
+            <label class="label" for="spass">Password</label>
             <div class="input">
               <input id="spass" name="password" type="password" minlength="6" placeholder="mín. 6 caracteres" required>
-              <button type="button" class="btn ghost" style="padding:6px 10px;border-radius:10px" onclick="togglePass('spass')">ver</button>
+              <button type="button" class="btn ghost" style="padding:6px 10px;border-radius:10px" onclick="togglePass('spass')">see</button>
             </div>
           </div>
           <div class="row">
-            <label class="help"><input type="checkbox" required> Acepto términos</label>
+            <label class="help"><input type="checkbox" required> I accept terms</label>
           </div>
           <div class="hr"></div>
           <div class="cta" style="margin-top:6px">
-            <button class="btn orange" type="submit">Crear cuenta</button>
-            <button class="btn ghost" type="reset">Limpiar</button>
+            <button class="btn orange" type="submit">Create account</button>
+            <button class="btn ghost" type="reset">Clean</button>
           </div>
           <p id="signup-msg" class="help" style="margin-top:10px"></p>
         </form>
